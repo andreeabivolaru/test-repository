@@ -28,15 +28,13 @@ public class CurrencyParitiesCache {
 	private void buildParitiesCache(CurrencyParities parities) {
 		Set<String> keySet = parities.getRates().keySet();
 		
-		for (String key1 : keySet) {
-			for (String key2 : keySet) {
-				if (key1.equals(key2)) {
-					continue;
+		keySet.forEach(key1 -> {
+			keySet.forEach(key2 -> {
+				if (!key1.equals(key2)) {
+					currencyParities.put(new CurrencyFromTo(key1, key2), parities.getRates().get(key2)/parities.getRates().get(key1));
 				}
-				
-				currencyParities.put(new CurrencyFromTo(key1, key2), parities.getRates().get(key2)/parities.getRates().get(key1));
-			}
-		}
+			});
+		});
 	}
 	
 	public Double getCachedObject(String from, String to) {		
